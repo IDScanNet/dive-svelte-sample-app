@@ -3,6 +3,8 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
+import css from 'rollup-plugin-css-only'
+import copy from 'rollup-plugin-copy'
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -28,6 +30,10 @@ function serve() {
 }
 
 export default {
+	external: ['@idscan/idvc'],
+	globals: {
+	  '@idscan/idvc': 'IDVC'
+	},
 	input: 'src/main.js',
 	output: {
 		sourcemap: true,
@@ -36,6 +42,15 @@ export default {
 		file: 'public/build/bundle.js'
 	},
 	plugins: [
+		copy({
+			targets: [
+			  { src: 'node_modules/@idscan/idvc/dist/networks/keras/*', dest: 'public/assets/networks/keras' },
+			  { src: 'node_modules/@idscan/idvc/dist/networks/mrz/*', dest: 'public/assets/networks/mrz' },
+			  { src: 'node_modules/@idscan/idvc/dist/networks/types/*', dest: 'public/assets/networks/types' }
+			],
+			verbose: true
+		  }),
+		css({ output: "public/build/idvc.css" }),
 		svelte({
 			// enable run-time checks when not in production
 			dev: !production,
@@ -55,7 +70,9 @@ export default {
 			browser: true,
 			dedupe: ['svelte']
 		}),
-		commonjs(),
+		commonjs({
+			include: 'node_modules/**'
+		}),
 
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated

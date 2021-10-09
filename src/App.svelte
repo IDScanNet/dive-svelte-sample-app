@@ -3,9 +3,9 @@
 	import { onMount } from 'svelte';
 	import IDVC from '@idscan/idvc';
 
-	let publicKey = 'pk_f123d212-fd2c-4d22-aae2-e3eb61765646';
-    let backendServerUrl = 'https://us-central1-idscan-backend.cloudfunctions.net';
-    let licenseKey = 'eyJwZGY0MTdrZXkiOiJNYTR4b1JBTHlCaU5yRmFLVGpLRG8vN0ZKQnJPdlpMU3VjbDFLZXV6cEliUSsxVXZWeS95MUVwSUFleUF2bE5HUlhGblQ0ZTl0K2RQK2wxMjlYYkxtZHRHRmVabHBRUVZOSGU5dGVBcEo2VzFwSGpWOFJJL2d1WW1YWEgzZ3htQlBaNC9sTUdJdVQzdWZHOFZpUjl2dFc0SFlhUTZGTU5aUFhKeUdvODZsSEU9IiwiaW1hZ2VQcm9jZXNzaW5nS2V5IjoiUmduMktPemNZaXNsd01YUkNxSC8ra3ZPNnBOanFUUlJlZDlTdWMrbXY3WHZkSTJtU3dFLzdIRk1qOFd3ZkZ6STExZmJneC94eDRrV2ppdmJtdWxhNXJYNzhxS1lZWnpsb05hVjI5bFZMSUlsNHJ3VjZycC9iU3VBL2dOMkxMbXRkcUZrbkhwQk5nNHdWbE9LRENodTZVNm5FRmZla1FuU1QxSjc0RDFpcVEwPSJ9';
+	let publicKey = 'REPLACE ME WITH YOUR PUBLIC KEY';
+    	let backendServerUrl = 'REPLACE ME WITH YOUR BACKEND SERVICE URL';
+    	let licenseKey = 'REPLACE ME WITH YOUR LICENSE KEY';
 	
 	onMount( () => {
 			new IDVC({
@@ -15,7 +15,6 @@
 			licenseKey: licenseKey,
 			steps: [
 				{type: 'front', name: 'Front Scan'},
-				{type: 'back', name: 'Back Scan'},
 				{type: 'face', name: 'Selfie'}
 			],
 			submit (data) {
@@ -39,19 +38,17 @@
 					body: JSON.stringify (request)
 				}).then (response => response.json ())
 					.then (response => {
-						fetch (backendServerUrl + '/api/ValidationRequests/complete/', {
+						fetch (backendServerUrl, {
 							method: 'POST',
 							headers: {
 								'Content-Type': 'application/json;charset=utf-8'
 							},
 							body: JSON.stringify ({
-								requestId: response.requestId,
-								documentType: response.documentType
+								requestId: response.requestId
 							})
 						}).then (response => response.json ())
 							.then (data => {
-								
-								alert((data.payload.isDocumentSuccess) ? 'Document valid' : 'Document invalid')
+								console.log(data);
 							})
 					}).catch(() => {
 					

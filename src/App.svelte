@@ -180,7 +180,7 @@
 </script>
 
 <main>
-	 <div id="videoCapturingEl"></div>
+	
 </main>
 
 <style>

@@ -1,4 +1,4 @@
-# DVS Web API Svelte Sample Application
+# DIVE Web API Svelte Sample Application
 
 1. First download  all the app's dependencies
 
